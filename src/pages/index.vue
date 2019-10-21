@@ -2,7 +2,7 @@
   <div class="wrap">
       <v-header></v-header>
       <div class="box">
-              <v-left></v-left>
+      <v-left></v-left>
       <v-right></v-right>
       </div>
   </div>

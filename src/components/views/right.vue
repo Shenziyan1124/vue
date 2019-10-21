@@ -1,6 +1,6 @@
 <template>
  <div class="right">
-     right
+     <router-view></router-view>
  </div>
 </template>
 <script>
@@ -12,6 +12,6 @@ export default {
 @import "../../common/stylus/index.styl"
 .right{
     flex 1
-    background pink 
+    background #fff
 }
 </style>
