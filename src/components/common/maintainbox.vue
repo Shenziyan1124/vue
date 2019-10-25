@@ -1,19 +1,13 @@
 <template>
   <div>
-    <h1>{{$route.name}}</h1>
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="维修" name="first"></el-tab-pane>
-      <el-tab-pane label="维修评论" name="second"></el-tab-pane>
-    </el-tabs>
-
-    <!-- <div class="box" v-if="activeName == 'first'">
+    <div class="box">
       <el-button type="primary" plain @click="tianjia">添加</el-button>
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column type="index" label="序号" width="230"></el-table-column>
-        <el-table-column prop="name" label="维修名称" width="180"></el-table-column>
-        <el-table-column prop="tel" label="电话" width="180"></el-table-column>
+        <el-table-column type="index" label="序号" width="150px"></el-table-column>
+        <el-table-column prop="name" label="维修名称" ></el-table-column>
+        <el-table-column prop="tel" label="电话" ></el-table-column>
         <el-table-column prop="type" label="类型"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="230">
+        <el-table-column fixed="right" label="操作" >
           <template slot-scope="scope">
             <el-button type="primary" @click="chakan(scope.row.id)" plain size="small">查看</el-button>
             <el-button type="danger" @click="del(scope.row.id)" size="small">删除</el-button>
@@ -64,43 +58,14 @@
           <el-button type="primary" @click="queding(form.id)">{{btn}}</el-button>
         </div>
       </el-dialog>
-    </div> -->
-    <v-maintanbox v-if="activeName == 'first'"></v-maintanbox>
-
-    <div class="box2" v-if="activeName == 'second'">
-      <div class="smallbox">
-        <el-select v-model="value" placeholder="请选择">
-          <el-option label="全部" value></el-option>
-          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-        </el-select>
-      </div>
-
-      <el-table :data="comment" height="250" border style="width: 100%">
-        <el-table-column type="index" label="序号" width="150px"></el-table-column>
-        <el-table-column prop="name" label="用户名称" ></el-table-column>
-        <el-table-column prop="content" label="评论内容"></el-table-column>
-        <!-- <el-table-column prop="time" label="时间"></el-table-column> -->
-        <el-table-column prop="time" label="时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.time | transTime}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" >
-          <template slot-scope="scope">
-            <el-button type="danger" @click="del(scope.row.id)" size="small">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
     </div>
   </div>
 </template>
-
 <script>
-import API from "../common/js/API";
+import API from "../../common/js/API";
 export default {
   data() {
     return {
-      activeName: "first",
       tableData: [],
       dialogFormVisible: false,
       form: {
@@ -124,17 +89,18 @@ export default {
     };
   },
   mounted() {
-    this.getComment();
+    this.info();
   },
   methods: {
-    getComment(params){
+    info() {
       this.$axios({
-         url:API.findRepairComment,
-         params:params
-      }).then(rst=>{
-        this.comment = rst.data.data;
-      })
+        url: API.findRepair
+      }).then(rst => {
+        this.tableData = rst.data.data;
+        this.options = rst.data.data;
+      });
     },
+
     tianjia() {
       this.dialogFormVisible = true;
       this.form = {};
@@ -211,16 +177,11 @@ export default {
         });
     }
   },
-  watch: {
-    value(){
-        this.getComment({repairId:this.value})
-    }
-  },
+
 };
 </script>
 <style scoped lang="stylus">
-@import '../common/stylus/index.styl';
-
+@import '../../common/stylus/index.styl';
 .el-tabs {
   width: 90%;
   margin: 0 auto;
@@ -243,4 +204,10 @@ export default {
     width: 60%;
   }
 }
+
+.el-form-item>>>.el-form-item__label{
+   text-align center;
+   padding 0
+}
+
 </style>

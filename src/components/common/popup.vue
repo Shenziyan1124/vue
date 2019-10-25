@@ -1,7 +1,5 @@
 <template>
   <div>
-    <el-button @click="$store.state.dialogFormVisible = true">添加</el-button>
-    {{$store.state.dialogFormVisible}}
     <el-dialog title="添加|修改管理员" :visible.sync="$store.state.dialogFormVisible">
       <el-form :model="user">
         <el-form-item label="账号" :label-width="formLabelWidth">
@@ -28,8 +26,9 @@
         <el-button @click="$store.state.dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="add">确 定</el-button>
       </div>
+
       {{$store.state.id}}
-    {{d}}
+      <!-- {{d}} -->
     </el-dialog>
   </div>
 </template>
@@ -46,20 +45,40 @@ export default {
         time: "",
         des: ""
       },
+     
       queren: "",
       dialogFormVisible: false,
-      formLabelWidth: "120px",
-
+      formLabelWidth: "120px"
     };
   },
 
+  mounted() {
+    this.$axios({
+      url: API.findManage,
+      method: "post",
+      data: { id: this.d.id }
+    }).then(rst => {
+      console.log(1);
+      //  console.log(rst.data.data[0]);
+      // this.user = rst.data.data[0];
+    });
+  },
+
   computed: {
-    ...mapGetters({        
+    ...mapGetters({
       d: "id"
     })
   },
 
   methods: {
+    info() {
+      this.$axios({
+        url: API.findManage,
+        method: "post"
+      }).then(rst => {
+        // this.$router.go(0)
+      });
+    },
     add() {
       this.$axios({
         url: API.addManage,
@@ -70,19 +89,18 @@ export default {
           this.$message.error("两次密码不一致");
           return;
         }
-
+        this.info();
         if (rst.data.isok) {
           this.$message({ message: rst.data.info, type: "success" });
           this.$store.dispatch("changeName", (this.dialogFormVisible = false));
+
+          this.$emit("getD",)
         } else {
           this.$message.error(rst.data.info);
         }
       });
-    }
-    // tianjia(){
-    // //    this.dialogFormVisible = true
-    //     this.$store.dispatch("changeName",this.dialogFormVisible=true)
-    // }
+    },
+
   }
 };
 </script>

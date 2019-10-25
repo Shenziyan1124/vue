@@ -1,19 +1,13 @@
 <template>
   <div>
-    <h1>{{$route.name}}</h1>
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="维修" name="first"></el-tab-pane>
-      <el-tab-pane label="维修评论" name="second"></el-tab-pane>
-    </el-tabs>
-
-    <!-- <div class="box" v-if="activeName == 'first'">
+    <div class="box">
       <el-button type="primary" plain @click="tianjia">添加</el-button>
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column type="index" label="序号" width="230"></el-table-column>
-        <el-table-column prop="name" label="维修名称" width="180"></el-table-column>
-        <el-table-column prop="tel" label="电话" width="180"></el-table-column>
-        <el-table-column prop="type" label="类型"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="230">
+        <el-table-column type="index" label="序号" width="150px"></el-table-column>
+        <el-table-column prop="name" label="水站名称"></el-table-column>
+        <el-table-column prop="tel" label="电话"></el-table-column>
+        <el-table-column prop="price" label="价格"></el-table-column>
+        <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" @click="chakan(scope.row.id)" plain size="small">查看</el-button>
             <el-button type="danger" @click="del(scope.row.id)" size="small">删除</el-button>
@@ -21,7 +15,7 @@
         </el-table-column>
       </el-table>
 
-      <el-dialog title="添加维修" :visible.sync="dialogFormVisible">
+      <el-dialog title="添加水站" :visible.sync="dialogFormVisible">
         <el-form :model="form">
           <el-form-item label="名称" :label-width="formLabelWidth">
             <el-input v-model="form.name" autocomplete="off" placeholder="名称"></el-input>
@@ -31,15 +25,15 @@
             <el-input v-model="form.score" type="number" autocomplete="off" placeholder="0-5分之间"></el-input>
           </el-form-item>
 
-          <el-form-item label="类型" :label-width="formLabelWidth">
-            <el-input v-model="form.type" type="number" autocomplete="off" placeholder="月销量"></el-input>
+          <el-form-item label="月销售量" :label-width="formLabelWidth">
+            <el-input v-model="form.count" type="number" autocomplete="off" placeholder="月销量"></el-input>
           </el-form-item>
 
           <el-form-item label="点赞数量" :label-width="formLabelWidth">
             <el-input v-model="form.likeNum" type="number" autocomplete="off" placeholder="点赞数量"></el-input>
           </el-form-item>
 
-          <el-form-item label="关注人数" :label-width="formLabelWidth">
+          <el-form-item label="浏览量" :label-width="formLabelWidth">
             <el-input v-model="form.readNum" type="number" autocomplete="off" placeholder="浏览量"></el-input>
           </el-form-item>
 
@@ -52,11 +46,19 @@
           </el-form-item>
 
           <el-form-item label="商家信息" :label-width="formLabelWidth">
-            <el-input v-model="form.info" autocomplete="off" placeholder="商家信息"></el-input>
+            <el-input v-model="form.des" autocomplete="off" placeholder="商家信息"></el-input>
           </el-form-item>
 
           <el-form-item label="电话" :label-width="formLabelWidth">
             <el-input v-model="form.tel" autocomplete="off" placeholder="联系电话"></el-input>
+          </el-form-item>
+
+          <el-form-item label="价格" :label-width="formLabelWidth">
+            <el-input v-model="form.price" autocomplete="off" placeholder="价格"></el-input>
+          </el-form-item>
+
+          <el-form-item label="图片" :label-width="formLabelWidth">
+            <el-input v-model="form.img" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -64,76 +66,75 @@
           <el-button type="primary" @click="queding(form.id)">{{btn}}</el-button>
         </div>
       </el-dialog>
-    </div> -->
-    <v-maintanbox v-if="activeName == 'first'"></v-maintanbox>
-
-    <div class="box2" v-if="activeName == 'second'">
-      <div class="smallbox">
-        <el-select v-model="value" placeholder="请选择">
-          <el-option label="全部" value></el-option>
-          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-        </el-select>
-      </div>
-
-      <el-table :data="comment" height="250" border style="width: 100%">
-        <el-table-column type="index" label="序号" width="150px"></el-table-column>
-        <el-table-column prop="name" label="用户名称" ></el-table-column>
-        <el-table-column prop="content" label="评论内容"></el-table-column>
-        <!-- <el-table-column prop="time" label="时间"></el-table-column> -->
-        <el-table-column prop="time" label="时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.time | transTime}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" >
-          <template slot-scope="scope">
-            <el-button type="danger" @click="del(scope.row.id)" size="small">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
     </div>
   </div>
 </template>
-
 <script>
-import API from "../common/js/API";
+import API from "../../common/js/API.js";
 export default {
   data() {
     return {
-      activeName: "first",
       tableData: [],
       dialogFormVisible: false,
       form: {
+        img: "",
         name: "",
         score: "",
-        info: "",
+        count: "",
         likeNum: "",
         readNum: "",
         address: "",
         len: "",
         des: "",
         tel: "",
-        type: "",
+        price: "",
         id: ""
       },
-      formLabelWidth: "120px",
+       formLabelWidth: "120px",
       btn: "确   定",
       options: [],
-      value: "全部",
+      value: "",
       comment: []
     };
   },
   mounted() {
-    this.getComment();
+    this.info();
   },
   methods: {
-    getComment(params){
+    info() {
       this.$axios({
-         url:API.findRepairComment,
-         params:params
-      }).then(rst=>{
-        this.comment = rst.data.data;
+        url: API.findWater
+      }).then(rst => {
+        if (rst.data.isok) {
+          this.tableData = rst.data.data;
+          this.options = rst.data.data;
+        }
+      });
+    },
+
+    yangshi(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
+        .then(rst => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+          this.$axios({
+            url: API.delWater,
+            params: { id: id }
+          });
+          this.info();
+        })
+        .catch(err => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     tianjia() {
       this.dialogFormVisible = true;
@@ -141,9 +142,11 @@ export default {
       this.btn = "确   定";
     },
     queding(id) {
+      console.log(id);
+      
       if (id == undefined) {
         this.$axios({
-          url: API.addRepair,
+          url: API.addWater,
           params: this.form
         }).then(rst => {
           if (rst.data.isok) {
@@ -156,7 +159,7 @@ export default {
         });
       } else {
         this.$axios({
-          url: API.updateRepair,
+          url: API.updateWater,
           params: this.form
         }).then(rst => {
           if (rst.data.isok) {
@@ -173,14 +176,14 @@ export default {
     },
     del(id) {
       this.$axios({
-        url: API.delRepair,
+        url: API.findWater,
         params: { id: id }
       });
-      this.yangshi();
+      this.yangshi(id);
     },
     chakan(id) {
       this.$axios({
-        url: API.findRepair,
+        url: API.findWater,
         method: "get",
         params: { id: id }
       }).then(rst => {
@@ -189,38 +192,12 @@ export default {
         this.dialogFormVisible = true;
         this.btn = "修 改";
       });
-    },
-    yangshi(a) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(rst => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-          this.info();
-        })
-        .catch(err => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
     }
-  },
-  watch: {
-    value(){
-        this.getComment({repairId:this.value})
-    }
-  },
+  }
 };
 </script>
 <style scoped lang="stylus">
-@import '../common/stylus/index.styl';
-
+@import "../../common/stylus/index";
 .el-tabs {
   width: 90%;
   margin: 0 auto;
@@ -242,5 +219,10 @@ export default {
   .el-select {
     width: 60%;
   }
+}
+
+.el-form-item>>>.el-form-item__label{
+   text-align center;
+   padding 0
 }
 </style>

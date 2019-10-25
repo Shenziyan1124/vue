@@ -2,25 +2,27 @@
   <div>
     <h1>{{$route.name}}</h1>
 
-    <div>
-      <span>账号</span>
-      <el-input placeholder="请输入内容" v-model="name" :disabled="true"></el-input>
-    </div>
-    <div>
-      <span>原始密码</span>
-      <el-input placeholder="请输入密码" v-model="oldpass" show-password></el-input>
-    </div>
-    <div>
-      <span>新密码</span>
-      <el-input placeholder="请输入密码" v-model="newpass" show-password></el-input>
-    </div>
-    <div>
-      <span>确认密码</span>
-      <el-input placeholder="请输入密码" v-model="queren" show-password></el-input>
-    </div>
+    <div class="box">
+      <div>
+        <span>账号</span>
+        <el-input placeholder="请输入内容" v-model="name" :disabled="true"></el-input>
+      </div>
+      <div>
+        <span>原始密码</span>
+        <el-input placeholder="请输入密码" v-model="oldpass" show-password></el-input>
+      </div>
+      <div>
+        <span>新密码</span>
+        <el-input placeholder="请输入密码" v-model="newpass" show-password></el-input>
+      </div>
+      <div>
+        <span>确认密码</span>
+        <el-input placeholder="请输入密码" v-model="queren" show-password></el-input>
+      </div>
 
-    <div class="text-center">
-      <el-button type="warning" @click="xiugai">修改</el-button>
+      <div class="text-center">
+        <el-button type="warning" @click="xiugai">修改</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +61,7 @@ export default {
             message: rst.data.info,
             type: "success"
           });
+          this.$router.push("welcome");
         } else {
           this.$message.error(rst.data.info);
         }
@@ -69,15 +72,19 @@ export default {
 </script>
 <style scoped lang="stylus">
 @import '../common/stylus/index.styl';
-
+.box{
+  width 90%;
+  margin 10px auto;
+}
 span {
   display: inline-block;
   width: 80px;
-  text-align: center;
+  text-align: left ;
+  font-size 16px
 }
 
 .el-input {
-  width: 80%;
+  width: 90%;
   margin: 10px;
 }
 </style>

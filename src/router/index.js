@@ -6,7 +6,8 @@ import login from "../pages/login.vue";
 import welcome from "../pages/welcome.vue";
 
 import admin from "../pages/admin.vue";
-import banner from "../pages/housekeeping.vue"; //banner
+import banner from "../pages/banner.vue"; //banner
+
 import tacher from "../pages/teacher.vue"; //teach
 import water from "../pages/water.vue"; //水站管理
 import maintain from "../pages/maintain.vue"; //维修管理
